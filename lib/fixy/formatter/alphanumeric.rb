@@ -9,23 +9,11 @@ module Fixy
       # left-justified and filled with spaces.
       #
 
-      def format_alphanumeric(input, byte_width)
+      def format_alphanumeric(input, field_width)
         input_string = String.new(input.to_s).tr "#{self.class::LINE_ENDING_CRLF}#{line_ending}", ''
         result = ''
-
-        if input_string.bytesize <= byte_width
-          result << input_string
-        else
-          input_string.each_char do |char|
-            if result.bytesize + char.bytesize <= byte_width
-              result << char
-            else
-              break
-            end
-          end
-        end
-
-        result << ' ' * (byte_width - result.bytesize)
+        result << input_string[0, field_width]
+        result << ' ' * (field_width - result.length)
       end
     end
   end
