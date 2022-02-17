@@ -81,7 +81,7 @@ module Fixy
       def parse(record, debug = false)
         raise ArgumentError, 'Record must be a string'  unless record.is_a? String
 
-        unless record.bytesize == record_length
+        unless record.length == record_length
           raise ArgumentError, "Record length is invalid (Expected #{record_length})"
         end
 
@@ -91,9 +91,7 @@ module Fixy
         current_position = 1
         current_record = 1
 
-        byte_record = record.bytes.to_a
         while current_position <= record_length do
-
           field = record_fields[current_position]
           raise StandardError, "Undefined field for position #{current_position}" unless field
 
@@ -101,7 +99,7 @@ module Fixy
           from   = field[:from] - 1
           to     = field[:to]   - 1
           method = field[:name]
-          value  = byte_record[from..to].pack('C*').force_encoding('utf-8')
+          value  = record[from..to]
 
           formatted_value = decorator.field(value, current_record, current_position, method, field[:size], field[:type])
           output << formatted_value
